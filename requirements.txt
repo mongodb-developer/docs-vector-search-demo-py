@@ -1,0 +1,8 @@
+pymongo
+langchain-community
+langchain-core
+langchain-mongodb 
+langchain_openai
+tiktoken
+datasets
+langchain_text_splitters
