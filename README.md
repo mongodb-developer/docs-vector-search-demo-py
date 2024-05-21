@@ -69,6 +69,18 @@ Now the collection should be full with FancyWidget.js docs data.
 
 ### Now lets update the following functions in `app.py`:
 
+Uncomment the import for 
+
+```python
+from langchain_mongodb import MongoDBAtlasVectorSearch
+```
+
+Add a vector store configuration using LangChain library before the `llm` intialisation statement:
+```python
+vector_store = MongoDBAtlasVectorSearch(collection=collection,embedding=OpenAIEmbeddings(), index_name='vector_index', text_key='text', embedding_key='embedding')
+llm = ChatOpenAI(model='gpt-3.5-turbo',temperature=0)
+```
+
 New LLM prompt:
 ```python
 prompt = ChatPromptTemplate.from_messages([

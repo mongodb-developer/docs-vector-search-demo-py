@@ -4,7 +4,7 @@ import gradio as gr
 import os
 import asyncio
 from pymongo import MongoClient
-from langchain_mongodb import MongoDBAtlasVectorSearch
+#from langchain_mongodb import MongoDBAtlasVectorSearch
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -23,21 +23,12 @@ collection = client[db_name][collection_name]
 
 try:
    
-    vector_store = MongoDBAtlasVectorSearch(collection=collection,embedding=OpenAIEmbeddings(), index_name='vector_index', text_key='text', embedding_key='embedding')
+    
     llm = ChatOpenAI(model='gpt-3.5-turbo',temperature=0)
     prompt = ChatPromptTemplate.from_messages([
     ("system", "AI Chatbot"),
-    #("user", "Answer user query {currentMessageContent}")
-    ("user", """You are a very enthusiastic FancyWidget representative who loves to help people! Given the following sections from the FancyWidget documentation, answer the question using only that information, outputted in markdown format. If you are unsure and the answer is not explicitly written in the documentation, say 'Sorry, I don't know how to help with that'.
-    history:
-    {history}
-     
-    Context sections:
-    {vectorSearch}
-  
-    Question: 
-    {currentMessageContent}""")
-     ])
+    ("user", "Answer user query {currentMessageContent}")])
+    
     chain = prompt | llm | output_parser
 
 except Exception as e:
@@ -48,14 +39,7 @@ except Exception as e:
 def get_movies(message, history):
 
     try:
-        docs =  list(vector_store.max_marginal_relevance_search(query=message, k=20, fetch_k=20, lambda_mult=0.1))
 
-        input = ''
-        for doc in docs:
-            input = input + doc.page_content + '\n\n'
-
-      
-        
         print_llm_text = chain.invoke({"vectorSearch": input, "currentMessageContent": message, "history": str(history) })
     
         for i in range(len(print_llm_text)):
