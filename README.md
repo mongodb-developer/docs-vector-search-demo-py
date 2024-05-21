@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This is Python flavor to this [workshop](https://mongodb-developer.github.io/).
+This is Python flavor to this [workshop](https://mongodb-developer.github.io/vector-search-workshop/).
 
 The `main` brunch holds an intial application phase with just a chatbot to OpenAI LLM.
 
