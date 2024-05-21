@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This is Python flavor to this [workshop](https://mongodb-developer.github.io/).
+This is Python flavor to this [workshop](https://mongodb-developer.github.io/vector-search-workshop/).
 
 The `main` brunch holds an intial application phase with just a chatbot to OpenAI LLM.
 
@@ -41,12 +41,14 @@ python app.py
 
 Visit http://localhost:7860 to see the chatbot.
 
-The results when asking "How do I install FancyWidget?" should result in a very generic result, not related to the docs hosted on `fake_docs` directory.
+The results when asking "How do I install FancyWidget?" should be in a very generic response form, not related to the docs hosted in directory `fake_docs` directory.
 
 
 ## Add vector store
 
-First lets create the vector embeddings and insert them into `embeddings` collection:
+1. Follow [create vector index](https://mongodb-developer.github.io/vector-search-workshop/docs/vector-search/create-index) section.
+
+2. Now lets create the vector embeddings and insert them into `embeddings` collection from `fake_docs` md files:
 ```
 python create_embeddings.py
 ```
@@ -68,6 +70,18 @@ Done
 Now the collection should be full with FancyWidget.js docs data.
 
 ### Now lets update the following functions in `app.py`:
+
+Uncomment the import for 
+
+```python
+from langchain_mongodb import MongoDBAtlasVectorSearch
+```
+
+Add a vector store configuration using LangChain library before the `llm` intialisation statement:
+```python
+vector_store = MongoDBAtlasVectorSearch(collection=collection,embedding=OpenAIEmbeddings(), index_name='vector_index', text_key='text', embedding_key='embedding')
+llm = ChatOpenAI(model='gpt-3.5-turbo',temperature=0)
+```
 
 New LLM prompt:
 ```python
@@ -116,7 +130,6 @@ python app.py
 ```
 
 We will see specific results for queries like "How do I install FancyWidget?", try to give some followups queries.
-
 
 
 
