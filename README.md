@@ -41,12 +41,14 @@ python app.py
 
 Visit http://localhost:7860 to see the chatbot.
 
-The results when asking "How do I install FancyWidget?" should result in a very generic result, not related to the docs hosted on `fake_docs` directory.
+The results when asking "How do I install FancyWidget?" should be in a very generic response form, not related to the docs hosted in directory `fake_docs` directory.
 
 
 ## Add vector store
 
-First lets create the vector embeddings and insert them into `embeddings` collection:
+1. Follow [create vector index](https://mongodb-developer.github.io/vector-search-workshop/docs/vector-search/create-index) section.
+
+2. Now lets create the vector embeddings and insert them into `embeddings` collection from `fake_docs` md files:
 ```
 python create_embeddings.py
 ```
