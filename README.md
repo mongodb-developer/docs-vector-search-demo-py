@@ -86,7 +86,7 @@ prompt = ChatPromptTemplate.from_messages([
      ])
 ```
 
-New `get_movies`:
+New `get_chat_response`:
 ```python
 def get_chat_response(message, history):
 
