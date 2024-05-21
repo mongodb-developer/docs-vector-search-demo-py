@@ -45,7 +45,7 @@ except Exception as e:
     vector_store = None
     print("An error occurred: \n" + traceback.format_exc())
 
-def get_movies(message, history):
+def get_chat_response(message, history):
 
     try:
         docs =  list(vector_store.max_marginal_relevance_search(query=message, k=20, fetch_k=20, lambda_mult=0.1))
@@ -68,7 +68,7 @@ def get_movies(message, history):
         
     
 
-demo = gr.ChatInterface(get_movies, examples=["How to install the FancyWidget?"], title="FancyWidget chatbot",description="This small chat uses a similarity search to find relevant docs, it uses MongoDB Atlas Vector Search read more here: https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-tutorial",submit_btn="Search").queue()
+demo = gr.ChatInterface(get_chat_response, examples=["How to install the FancyWidget?"], title="FancyWidget chatbot",description="This small chat uses a similarity search to find relevant docs, it uses MongoDB Atlas Vector Search read more here: https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-tutorial",submit_btn="Search").queue()
 
 if __name__ == "__main__":
     demo.launch()
