@@ -36,7 +36,7 @@ except Exception as e:
     vector_store = None
     print("An error occurred: \n" + traceback.format_exc())
 
-def get_movies(message, history):
+def get_chat_response(message, history):
 
     try:
 
@@ -48,11 +48,11 @@ def get_movies(message, history):
     except Exception as e:
         error_message = traceback.format_exc()
         print("An error occurred: \n" + error_message)
-        yield "Please clone the repo and add your open ai key as well as your MongoDB Atlas URI in the Secret Section of you Space\n OPENAI_API_KEY (your Open AI key) and MONGODB_ATLAS_CLUSTER_URI (0.0.0.0/0 whitelisted instance with Vector index created) \n\n For more information : https://mongodb.com/products/platform/atlas-vector-search"
+        yield "Please clone the repo and add your open ai key as well as your MongoDB Atlas URI in the Secret Section of you Space\n OPENAI_API_KEY (your Open AI key) and MONGODB_ATLAS_URI (0.0.0.0/0 whitelisted instance with Vector index created) \n\n For more information : https://mongodb.com/products/platform/atlas-vector-search"
         
     
 
-demo = gr.ChatInterface(get_movies, examples=["How to install the FancyWidget?"], title="FancyWidget chatbot",description="This small chat uses a similarity search to find relevant docs, it uses MongoDB Atlas Vector Search read more here: https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-tutorial",submit_btn="Search").queue()
+demo = gr.ChatInterface(get_chat_response, examples=["How to install the FancyWidget?"], title="FancyWidget chatbot",description="This small chat uses a similarity search to find relevant docs, it uses MongoDB Atlas Vector Search read more here: https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-tutorial",submit_btn="Search").queue()
 
 if __name__ == "__main__":
     demo.launch()
