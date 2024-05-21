@@ -98,9 +98,9 @@ prompt = ChatPromptTemplate.from_messages([
      ])
 ```
 
-New `get_movies`:
+New `get_chat_response`:
 ```python
-def get_movies(message, history):
+def get_chat_response(message, history):
 
     try:
         docs =  list(vector_store.max_marginal_relevance_search(query=message, k=20, fetch_k=20, lambda_mult=0.1))
