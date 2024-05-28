@@ -16,7 +16,7 @@ import json
 
 ## Connect to MongoDB Atlas local cluster
 MONGODB_ATLAS_CLUSTER_URI = os.getenv('MONGODB_ATLAS_URI')
-client = MongoClient(MONGODB_ATLAS_CLUSTER_URI)
+client = MongoClient(MONGODB_ATLAS_CLUSTER_URI, appname="devrel.content.python")
 db_name = 'docs'
 collection_name = 'embeddings'
 collection = client[db_name][collection_name]
