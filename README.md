@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This is Python flavor to this [workshop](https://mongodb-developer.github.io/vector-search-workshop/).
+This is Python flavor to this [workshop](https://mongodb-developer.github.io/vector-search-workshop/). It uses [chainlit](https://docs.chainlit.io/) open source chat framework for ease of development.
 
 The `main` brunch holds an intial application phase with just a chatbot to OpenAI LLM.
 
