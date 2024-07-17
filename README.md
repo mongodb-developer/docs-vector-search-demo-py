@@ -34,12 +34,12 @@ export MONGODB_ATLAS_URI=<your-atlas-srv-uri>
 pip install -r requirements.txt
 ```
 
-3. Run the gradio application
+3. Run the chainlit application
 ```
-python app.py
+chainlit run app.py
 ```
 
-Visit http://localhost:7860 to see the chatbot.
+Visit http://localhost:8000 to see the chatbot.
 
 The results when asking "How do I install FancyWidget?" should be in a very generic response form, not related to the docs hosted in directory `fake_docs` directory.
 
@@ -89,44 +89,39 @@ prompt = ChatPromptTemplate.from_messages([
     ("system", "AI Chatbot"),
     #("user", "Answer user query {currentMessageContent}")
     ("user", """You are a very enthusiastic FancyWidget representative who loves to help people! Given the following sections from the FancyWidget documentation, answer the question using only that information, outputted in markdown format. If you are unsure and the answer is not explicitly written in the documentation, say 'Sorry, I don't know how to help with that'.
-    history:
-    {history}
-     
+
     Context sections:
-    {vectorSearch}
+    {context}
   
     Question: 
-    {currentMessageContent}""")
+    {question}""")
      ])
 ```
 
-New `get_chat_response`:
+New `on_message`:
 ```python
-def get_chat_response(message, history):
+async def on_message(message: cl.Message):
+    runnable = cl.user_session.get("runnable")  # type: Runnable
 
-    try:
-        docs =  list(vector_store.max_marginal_relevance_search(query=message, k=20, fetch_k=20, lambda_mult=0.1))
+    msg = cl.Message(content="")
+    docs =  list(vector_store.max_marginal_relevance_search(query=message.content, k=20, fetch_k=20, lambda_mult=0.1))
 
-        input = ''
-        for doc in docs:
-            input = input + doc.page_content + '\n\n'
+    input = ''
+    for doc in docs:
+        input = input + doc.page_content + '\n\n'
 
-      
-        
-        print_llm_text = chain.invoke({"vectorSearch": input, "currentMessageContent": message, "history": str(history) })
-    
-        for i in range(len(print_llm_text)):
-            time.sleep(0.05)
-            yield  print_llm_text[: i+1]
-    except Exception as e:
-        error_message = traceback.format_exc()
-        print("An error occurred: \n" + error_message)
-        yield "Please clone the repo and add your open ai key as well as your MongoDB Atlas URI in the Secret Section of you Space\n OPENAI_API_KEY (your Open AI key) and MONGODB_ATLAS_URI (0.0.0.0/0 whitelisted instance with Vector index created) \n\n For more information : https://mongodb.com/products/platform/atlas-vector-search"
+    for chunk in await cl.make_async(runnable.stream)(
+        {"question": message.content, "context": input},
+        config=RunnableConfig(callbacks=[cl.LangchainCallbackHandler()]),
+    ):
+        await msg.stream_token(chunk)
+
+    await msg.send()
 ```
 
 Now when we run the application:
 ```
-python app.py
+chainlit run app.py
 ```
 
 We will see specific results for queries like "How do I install FancyWidget?", try to give some followups queries.

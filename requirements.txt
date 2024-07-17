@@ -6,3 +6,4 @@ langchain_openai
 tiktoken
 datasets
 langchain_text_splitters
+chainlit
